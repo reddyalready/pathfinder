@@ -1,0 +1,10 @@
+# Project Goals #
+
+### GUI ###
+
+  * Include options to skip simulation of route
+  * Include a 'Randomise' button that creates a random maze.
+
+### Core ###
+
+  * Include options for using other routing algorithms
