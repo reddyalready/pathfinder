@@ -8,7 +8,7 @@ class App extends Component {
     return (
       <div>
         <p>Pathfinder</p>
-        <Grid />
+        <Grid sizeX="20" sizeY="20" />
       </div>
     );
   }

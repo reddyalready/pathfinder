@@ -4,7 +4,10 @@ A square in the maze. Type values:
 0 = Open
 1 = Wall
 */
-class Square extends React.Component {
+
+import React, {Component} from 'react';
+
+class Square extends Component {
 
   constructor() {
     super();
@@ -15,9 +18,11 @@ class Square extends React.Component {
 
   render() {
     return (
-      <button className="square" onClick={() => alert('click')}>
-        #Set colour/functionality based on value
+      <button className="square" onClick={() => this.setState({type: 1})}>
+
       </button>
     )
   }
 };
+
+export default Square;
