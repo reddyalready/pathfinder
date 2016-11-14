@@ -20,10 +20,15 @@ class Grid extends Component {
 
   }
 
+  onGoalSelected(x, y) {
+    debugger;
+  }
+
   render() {
+    var component = this;
     var renderableSquareRows = this.state.squares.map(function(sqRow) {
       var renderableSquareRow = sqRow.map(function(sq) {
-        return <Square value={sq} />
+        return <Square value={sq} isGoal='false' onGoalSelected={ component.onGoalSelected } />
       });
       renderableSquareRow.push(<br />);
       return renderableSquareRow;

@@ -1,0 +1,15 @@
+.square {
+  padding: 10px;
+}
+
+.square-open {
+  border: 0.1em solid black;
+}
+
+.square-wall {
+  background-color: #000000;
+}
+
+.square-goal {
+  background-color: red;
+}
