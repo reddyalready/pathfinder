@@ -18,18 +18,26 @@ class Grid extends Component {
       this.state.squares.push(new Array(parseInt(props.sizeY, 10)).fill(0));
     }
 
+    this.onGoalSelected = this.onGoalSelected.bind(this);
   }
 
   onGoalSelected(x, y) {
-    debugger;
+    var newSquares = this.state.squares;
+    newSquares[x][y] = 1;
+    this.setState({squares: newSquares});
   }
 
   render() {
     var component = this;
+    var countY = 0;
     var renderableSquareRows = this.state.squares.map(function(sqRow) {
+      var countX = 0;
       var renderableSquareRow = sqRow.map(function(sq) {
-        return <Square value={sq} isGoal='false' onGoalSelected={ component.onGoalSelected } />
+        var squareHtml = <Square value={sq} x={countX} y={countY} onGoalSelected={ component.onGoalSelected } />
+        countX++;
+        return squareHtml;
       });
+      countY++;
       renderableSquareRow.push(<br />);
       return renderableSquareRow;
     });

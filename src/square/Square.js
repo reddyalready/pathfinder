@@ -11,13 +11,21 @@ class Square extends Component {
   constructor(props) {
     super(props);
 
+    this.validateProps(props);
+
     this.state = {
-      type: props.isGoal ? 'goal' : 'open',
+      type: props.value ? 'goal' : 'open',
       onGoalSelected : props.onGoalSelected
     };
-    
+
     this.onClick = this.onClick.bind(this);
     this.onContextMenu = this.onContextMenu.bind(this);
+  }
+
+  validateProps(props) {
+    if (typeof props.x === 'undefined' || typeof props.y === 'undefined') {
+      console.log('Square co-ordinates missing');
+    }
   }
 
   onClick(event) {
@@ -30,8 +38,9 @@ class Square extends Component {
   }
 
   onContextMenu(event) {
+    event.preventDefault();
     //Right click toggles goal - tell the grid where the goal is
-    this.props.onGoalSelected(this.props.x,this.props.y);
+    this.props.onGoalSelected(this.props.x, this.props.y);
     this.setState({type: 'goal'})
   }
 
@@ -50,7 +59,7 @@ class Square extends Component {
     }
 
     return (
-      <span className={typeClass} onClick={this.handleClick} onContextMenu={this.handleClick}>
+      <span className={typeClass} onClick={this.onClick} onContextMenu={this.onContextMenu}>
 
       </span>
     )
