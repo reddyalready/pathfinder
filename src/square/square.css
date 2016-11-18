@@ -1,15 +1,17 @@
-.square {
-  padding: 10px;
+span {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
 }
 
-.square-open {
-  border: 0.1em solid black;
+span.open {
+  background: lightgrey;
 }
 
-.square-wall {
-  background-color: #000000;
+span.wall {
+  background: black;
 }
 
-.square-goal {
+span.goal {
   background-color: red;
 }

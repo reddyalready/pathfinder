@@ -14,8 +14,10 @@ class Square extends Component {
     this.validateProps(props);
 
     this.state = {
-      type: props.value ? 'goal' : 'open',
-      onGoalSelected : props.onGoalSelected
+      type: props.type,
+      onGoalSelected : props.onGoalSelected,
+      x: props.x,
+      y: props.y
     };
 
     this.onClick = this.onClick.bind(this);
@@ -23,8 +25,11 @@ class Square extends Component {
   }
 
   validateProps(props) {
-    if (typeof props.x === 'undefined' || typeof props.y === 'undefined') {
+    if (!props.hasOwnProperty("x") || !props.hasOwnProperty("y")) {
       console.log('Square co-ordinates missing');
+    }
+    if (!props.hasOwnProperty("type")) {
+      console.log('Type property not supplied for square '+props.x+','+props.y);
     }
   }
 
@@ -40,8 +45,7 @@ class Square extends Component {
   onContextMenu(event) {
     event.preventDefault();
     //Right click toggles goal - tell the grid where the goal is
-    this.props.onGoalSelected(this.props.x, this.props.y);
-    this.setState({type: 'goal'})
+    this.props.onGoalSelected(this.state.x, this.state.y);
   }
 
   render() {
@@ -49,13 +53,13 @@ class Square extends Component {
 
     switch(this.state.type) {
       case('goal'):
-        typeClass = 'square square-goal';
+        typeClass = 'goal';
         break;
       case('wall'):
-        typeClass = 'square square-wall';
+        typeClass = 'wall';
         break;
       default:
-        typeClass = 'square square-open';
+        typeClass = 'open';
     }
 
     return (
