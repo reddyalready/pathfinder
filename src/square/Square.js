@@ -13,13 +13,6 @@ class Square extends Component {
 
     this.validateProps(props);
 
-    this.state = {
-      type: props.type,
-      onGoalSelected : props.onGoalSelected,
-      x: props.x,
-      y: props.y
-    };
-
     this.onClick = this.onClick.bind(this);
     this.onContextMenu = this.onContextMenu.bind(this);
   }
@@ -34,36 +27,18 @@ class Square extends Component {
   }
 
   onClick(event) {
-    //Left click toggles between open and wall
-    if(this.state.type === 'open') {
-      this.setState({type: 'wall'});
-    } else {
-      this.setState({type: 'open'});
-    }
+    this.props.onClick(this.props.x, this.props.y, this.props.type);
   }
 
   onContextMenu(event) {
     event.preventDefault();
     //Right click toggles goal - tell the grid where the goal is
-    this.props.onGoalSelected(this.state.x, this.state.y);
+    this.props.onGoalSelected(this.props.x, this.props.y);
   }
 
   render() {
-    var typeClass;
-
-    switch(this.state.type) {
-      case('goal'):
-        typeClass = 'goal';
-        break;
-      case('wall'):
-        typeClass = 'wall';
-        break;
-      default:
-        typeClass = 'open';
-    }
-
     return (
-      <span className={typeClass} onClick={this.onClick} onContextMenu={this.onContextMenu}>
+      <span className={this.props.type} onClick={this.onClick} onContextMenu={this.onContextMenu}>
 
       </span>
     )

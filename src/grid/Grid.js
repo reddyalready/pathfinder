@@ -4,6 +4,7 @@
 
 import React, {Component} from 'react';
 import Square from '../square/Square.js';
+import Immutable from 'immutable';
 
 class Grid extends Component {
 
@@ -12,45 +13,57 @@ class Grid extends Component {
 
     this.validateProps(props);
 
-    this.state = {
-      squares: [],
-      goal: {x: props.sizeX / 2, y: props.sizeY / 2}
-    };
+    var initSquares = [];
 
     for(var i = 0; i < props.sizeX; i++) {
-      this.state.squares.push(new Array(parseInt(props.sizeY, 10)).fill("open"));
+        initSquares.push(new Array(parseInt(props.sizeY, 10)).fill('open'));
     }
 
+    this.state = {
+        squares: Immutable.fromJS(initSquares),
+        goal: {x: props.sizeX / 2, y: props.sizeY / 2}
+    };
+
+    this.onSquareClicked = this.onSquareClicked.bind(this);
     this.onGoalSelected = this.onGoalSelected.bind(this);
   }
 
   validateProps(props) {
     if(!props.hasOwnProperty('sizeX') || !props.hasOwnProperty('sizeY')) {
-      console.log("Grid was no supplied sizeX or sizeY");
+      console.log("Grid was not supplied sizes");
     }
   }
 
+  onSquareClicked(x, y, currentType) {
+    //Left click toggles between open and wall
+    if(currentType === 'open') {
+      this.setState(({squares}) => ({
+        squares: squares.setIn([x, y], 'wall')
+      }));
+    } else {
+      this.setState(({squares}) => ({
+        squares: squares.setIn([x, y], 'open')
+      }));
+    }
+
+  }
+
   onGoalSelected(x, y) {
-    var newSquares = this.state.squares;
-    newSquares[this.state.goal.x][this.state.goal.y] = 'open';
-    newSquares[x][y] = 'goal';
-    this.setState({squares: newSquares});
+    this.setState(({squares}) => ({
+      //Set current goal to open
+      squares: squares.setIn([this.state.goal.x, this.state.goal.y], 'open'),
+      //Set new goal
+      squares: squares.setIn([x, y] , 'goal')
+    }));
   }
 
   render() {
-    //TODO: Use some sort of stream?
-    var component = this;
-    var countY = 0;
-    var renderableSquareRows = this.state.squares.map(function(sqRow) {
-      var countX = 0;
-      var renderableSquareRow = sqRow.map(function(sq) {
-        var squareHtml = <Square type={sq} x={countX} y={countY} onGoalSelected={ component.onGoalSelected } />
-        countX++;
-        return squareHtml;
-      });
-      countY++;
-      renderableSquareRow.push(<br />);
-      return renderableSquareRow;
+    const component = this;
+    const renderableSquareRows = this.state.squares.map((sqRow, outerIndex) => {
+      const renderableSquareRow = sqRow.map((sq, innerIndex) =>
+          <Square type={sq} x={outerIndex} y={innerIndex} onClick={ component.onSquareClicked } onGoalSelected={ component.onGoalSelected }/>
+      );
+      return renderableSquareRow.push(<br />);
     });
 
     return (
