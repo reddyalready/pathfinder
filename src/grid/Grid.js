@@ -2,7 +2,7 @@
  A grid (or maze) of squares
 */
 
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import Square from '../square/Square.js';
 import Immutable from 'immutable';
 
@@ -50,18 +50,20 @@ class Grid extends Component {
 
   onGoalSelected(x, y) {
     this.setState(({squares}) => ({
-      //Set current goal to open
-      squares: squares.setIn([this.state.goal.x, this.state.goal.y], 'open'),
-      //Set new goal
-      squares: squares.setIn([x, y] , 'goal')
+      //Set current goal to open and new goal to goal
+      squares: squares.setIn([this.state.goal.x, this.state.goal.y], 'open').setIn([x, y] , 'goal'),
+      goal: {
+        x,
+        y,
+      }
     }));
   }
 
   render() {
-    const component = this;
+    const grid = this;
     const renderableSquareRows = this.state.squares.map((sqRow, outerIndex) => {
       const renderableSquareRow = sqRow.map((sq, innerIndex) =>
-          <Square type={sq} x={outerIndex} y={innerIndex} onClick={ component.onSquareClicked } onGoalSelected={ component.onGoalSelected }/>
+          <Square type={sq} x={outerIndex} y={innerIndex} onMouseDown={ grid.onSquareClicked } onGoalSelected={ grid.onGoalSelected }/>
       );
       return renderableSquareRow.push(<br />);
     });
@@ -73,5 +75,10 @@ class Grid extends Component {
     )
   }
 }
+
+Grid.propTypes = {
+  sizeX: PropTypes.number.isRequired,
+  sizeY: PropTypes.number.isRequired
+};
 
 export default Grid;

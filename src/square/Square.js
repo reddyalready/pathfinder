@@ -13,7 +13,7 @@ class Square extends Component {
 
     this.validateProps(props);
 
-    this.onClick = this.onClick.bind(this);
+    this.onMouseDown = this.onMouseDown.bind(this);
     this.onContextMenu = this.onContextMenu.bind(this);
   }
 
@@ -26,8 +26,8 @@ class Square extends Component {
     }
   }
 
-  onClick(event) {
-    this.props.onClick(this.props.x, this.props.y, this.props.type);
+  onMouseDown(event) {
+    this.props.onMouseDown(this.props.x, this.props.y, this.props.type);
   }
 
   onContextMenu(event) {
@@ -38,11 +38,11 @@ class Square extends Component {
 
   render() {
     return (
-      <span className={this.props.type} onClick={this.onClick} onContextMenu={this.onContextMenu}>
+      <span className={this.props.type} onMouseDown={this.onMouseDown} onContextMenu={this.onContextMenu}>
 
       </span>
     )
   }
-};
+}
 
 export default Square;
