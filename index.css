@@ -1,17 +1,21 @@
-span {
+body {
+  font-family: sans-serif;
+}
+
+.square {
   width: 20px;
   height: 20px;
   display: inline-block;
 }
 
-span.open {
+.square.open {
   background: lightgrey;
 }
 
-span.wall {
+.square.wall {
   background: black;
 }
 
-span.goal {
+.square.goal {
   background-color: red;
 }
