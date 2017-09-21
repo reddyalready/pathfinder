@@ -1,18 +1,12 @@
-# Created by .ignore support plugin (hsz.mobi)
-# See http://help.github.com/ignore-files/ for more about ignoring files.
-
-# dependencies
-node_modules
-
-# testing
-coverage
-
-# production
-build
-
-# misc
 .DS_Store
-.env
+node_modules/
+dist/
 npm-debug.log
+yarn-error.log
+
+# Editor directories and files
 .idea
-*.iml
+*.suo
+*.ntvs*
+*.njsproj
+*.sln

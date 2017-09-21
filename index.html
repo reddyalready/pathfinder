@@ -1,78 +1,10 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="index.css">
-    <script src="https://unpkg.com/vue"></script>
-    <script>
-      window.onload = function() {
-
-        Vue.component('grid', {
-          props: ['size'],
-          template: '<div><grid-row v-for="(row,index) in grid" v-bind:row="row" :key="index"></grid-row></div>',
-          data: function() {
-            var counter = 0;
-            var grid = []
-            for (var i = 0; i < 3; i++ ) {
-              var row = []
-              for (var j = 0; j < 3; j++) {
-                row[j] = { id: counter++, type: 'open' }
-              }
-              grid[i] = row
-            }
-            return {
-              grid: grid
-            }
-          },
-          methods: {
-            onSquareClicked = function(x, y, currentType) {
-              //Left click toggles between open and wall
-              if(currentType === 'open') {
-                this.grid[x][y] = { type: 'wall' }
-              } else {
-                this.grid[x][y] = { type: 'open' }
-              }
-            },
-            onGoalSelected = function(x, y) {
-              this.grid[x][y] = { type: 'goal' }
-            }
-          }
-        })
-
-        Vue.component('gridRow', {
-          props: ['row'],
-          template: '<div><square v-for="square in row" v-bind:square="square" :key="square.id"></square></div>'
-        })
-
-        Vue.component('square', {
-          props: ['square', 'onMouseDown', 'onGoalSelected'],
-          template: '<span :class="[\'square\', square.type]"></span>',
-          methods: {
-            onMouseDown = function(event) {
-              this.onMouseDown(this.props.x, this.props.y, this.props.type);
-            },
-            onContextMenu = function(event) {
-              event.preventDefault();
-              //Right click toggles goal - tell the grid where the goal is
-              this.onGoalSelected(this.props.x, this.props.y);
-            }
-          }
-        })
-
-        var app = new Vue({
-          el: '#app',
-          data: {
-            size: 3
-          }
-        })
-      }
-    </script>
-  </head>
-  <body>
-    <div id="app">
-        <p>Pathfinder</p>
-        <grid v-bind:size="size"></grid>
-        <p>{{ size }}</p>
-      </div>
-  </body>
+</head>
+<body>
+<div id="app"></div>
+<script src="dist/build.js"></script>
+</body>
 </html>
