@@ -2,31 +2,26 @@
     <div
             @click.stop=handleClick($event)
             class="square"
-            :class=classObject>
+            :class=node.type>
     </div>
 </template>
 
 <script>
   export default {
     props: {
-      square: {
+      node: {
         type: Object,
         required: true
-      }
-    },
-    computed: {
-      classObject: function() {
-        return this.square.type
       }
     },
     methods: {
       handleClick: function($event) {
         if($event.ctrlKey || $event.metaKey) {
-          this.$emit('setGoal', this.square);
+          this.$emit('setGoal', this.node);
         } else if($event.shiftKey) {
-          this.$emit('setStart', this.square);
+          this.$emit('setStart', this.node);
         } else {
-          this.$emit('toggleType', this.square);
+          this.$emit('toggleType', this.node);
         }
       }
     }

@@ -1,19 +1,23 @@
 <template>
     <div id="app">
         <p>Pathfinder</p>
-        <Grid :size=size></Grid>
+        <Grid :size=size :pathfinder=pathfinders.aStar></Grid>
     </div>
 </template>
 
 <script>
-  import Grid from './Grid.vue'
+  import Grid from './Map.vue'
+  import AStar from './algorithms/aStar'
 
   export default {
     name: 'app',
     components: {Grid},
     data() {
       return {
-        size: 10
+        size: 5,
+        pathfinders: {
+          aStar: AStar
+        }
       }
     }
   }

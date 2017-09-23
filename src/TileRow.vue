@@ -1,13 +1,13 @@
 <template>
     <div>
-        <square v-for="square in row" :square=square :key=square.id
+        <square v-for="node in row" :node=node :key=node.id
                 v-on:toggleType=toggleType v-on:setGoal=setGoal v-on:setStart=setStart>
         </square>
     </div>
 </template>
 
 <script>
-  import Square from "./Square.vue"
+  import Square from "./Tile.vue"
 
   export default {
     components: {Square},
