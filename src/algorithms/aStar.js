@@ -10,8 +10,9 @@ export default {
     const nodesToExplore = new PriorityQueue({comparator: function(a,b) { return a.cost - b.cost }});
     const solution = {};
 
-    nodesToExplore.queue(new CostedNode(grid.start, 0));
-    solution[grid.start.id] = { cost: 0, previous: grid.start.id };
+    const startNode = grid.getStartNode();
+    nodesToExplore.queue(new CostedNode(startNode, 0));
+    solution[startNode.id] = { cost: 0 };
 
     while(nodesToExplore.length > 0) {
       const current = nodesToExplore.dequeue();

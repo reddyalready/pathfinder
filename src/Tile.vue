@@ -1,8 +1,6 @@
 <template>
-    <div
-            @click.stop=handleClick($event)
-            class="square"
-            :class=node.type>
+    <div @click.stop=handleClick($event) class="square" :class=classObject>
+        <p v-show=this.node.solution.cost>{{this.node.solution.cost}}</p>
     </div>
 </template>
 
@@ -12,6 +10,16 @@
       node: {
         type: Object,
         required: true
+      }
+    },
+    computed: {
+      classObject: function() {
+        let classes = [this.node.type];
+        //If solution exists, add solved class
+        if(this.node.hasOwnProperty('solution') && typeof this.node.solution !== 'undefined') {
+          classes.push('solved');
+        }
+        return classes;
       }
     },
     methods: {
@@ -49,5 +57,14 @@
 
     .square.start {
         background-color: blue;
+    }
+
+    .square.solved {
+        border: 1px solid black;
+    }
+
+    .square.solved p {
+        display: inline-block;
+        vertical-align: top;
     }
 </style>

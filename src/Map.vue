@@ -1,18 +1,23 @@
 <template>
     <div>
         <button @click="solve">Run</button>
-        <TileRow v-for="(row,index) in grid.rows()" :row=row :key=index
-                 v-on:toggleType=toggleType v-on:setGoal=setGoal v-on:setStart=setStart>
-        </TileRow>
+        <div v-if="show">
+            <div v-for="row in grid.raw">
+                <Tile v-for="node in row" :node=node :key=node.id
+                      v-on:toggleType=toggleType v-on:setGoal=setGoal v-on:setStart=setStart>
+                </Tile>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-  import TileRow from "./TileRow.vue"
+  import Vue from 'vue'
   import Grid from "./models/grid"
+  import Tile from "./Tile.vue"
 
   export default {
-    components: {TileRow},
+    components: {Tile},
     props: {
       size: {
         type: Number,
@@ -25,7 +30,8 @@
     },
     data() {
       return {
-        grid: new Grid(this.size)
+        grid: new Grid(this.size),
+        show: true
       }
     },
     methods: {
@@ -38,8 +44,25 @@
       setStart(selected) {
         this.grid.setStart(selected);
       },
+      rerender(){
+        this.show = false;
+        this.$nextTick(() => {
+          this.show = true;
+        })
+      },
       solve() {
-        this.pathfinder.findPath(this.grid)
+        this.solution = this.pathfinder.findPath(this.grid);
+
+        this.grid = new Grid(
+          this.grid.raw.map((row) => {
+            return row.map((node) => {
+                node.solution = this.solution[node.id];
+                return node;
+            })
+          })
+        );
+
+        this.rerender();
       }
     }
   }

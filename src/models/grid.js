@@ -1,70 +1,113 @@
 import Node from "./node"
 
 class Grid {
-  constructor(size) {
-    this.size = size;
-    this.grid = [];
-
-    const middle = Math.floor(this.size / 2);
-
-    this.grid = this._initGrid();
-
-    this.start = this.grid[0][middle];
-    this.start.type = 'start';
-
-    this.goal = this.grid[middle][middle];
-    this.goal.type = 'goal';
+  constructor(value) {
+    if(Array.isArray(value)) {
+      this._fromArray(value);
+      return;
+    }
+    this._fromSize(value);
   }
 
-  _initGrid() {
-    const grid = [];
+  _fromSize(size) {
+    const middle = Math.floor(size / 2);
 
-    for (let thisRow = 0; thisRow < this.size; thisRow++) {
+    const options = {
+      start: {row: 0, col: middle},
+      goal: {row: middle, col: middle}
+    };
+
+    this.size = size;
+    this.raw = this._initGrid(this.size, options);
+    this.start = options.start;
+    this.goal = options.goal;
+  }
+
+  _fromArray(rawArray) {
+    this.raw = rawArray;
+    this.size = this.raw.length;
+
+    const startNode = this._find(function (node) {
+      return node.type === 'start'
+    });
+    this.start = {row: startNode.row, col: startNode.col};
+
+    const goalNode = this._find(function (node) {
+      return node.type === 'goal'
+    });
+    this.goal = {row: goalNode.row, col: goalNode.col};
+  }
+
+  _initGrid(size, options) {
+    const nodeArray = [];
+
+    for (let rowIdx = 0; rowIdx < size; rowIdx++) {
       const row = [];
-      for (let thisCol = 0; thisCol < this.size; thisCol++) {
-        row[thisCol] = new Node(thisRow, thisCol, 'open');
+      for (let colIdx = 0; colIdx < size; colIdx++) {
+        let type = 'open';
+        if (rowIdx === options.start.row && colIdx === options.start.col) {
+          type = 'start';
+        } else if (rowIdx === options.goal.row && colIdx === options.goal.col) {
+          type = 'goal'
+        }
+        row[colIdx] = new Node(rowIdx, colIdx, type);
       }
-      grid[thisRow] = row
+      nodeArray[rowIdx] = row
     }
 
-    return grid
+    return nodeArray
   }
 
-  rows() {
-    return this.grid
+  _find(findFunction) {
+    for (const row of this.raw) {
+      const found = row.find(findFunction);
+      if (found) {
+        return found;
+      }
+    }
+    return undefined
   }
 
   toggleType(selected) {
     //Left click toggles between open and wall
-    if (selected.type === 'open') {
-      selected.type = 'wall'
-    } else {
-      selected.type = 'open'
+    switch (selected.type) {
+      case 'open':
+        selected.type = 'wall';
+        break;
+      case 'wall':
+        selected.type = 'open';
+        break;
+      default:
+      //Do nothing
     }
-    this.grid[selected.row].splice(selected.col, 1, selected)
+  }
+
+  getStartNode() {
+    return this.raw[this.start.row][this.start.col];
   }
 
   setStart(selected) {
-    this.swap(this.goal, selected);
+    this._swapType(this.raw[this.start.row][this.start.col], selected);
+    this.start = {row: selected.row, col: selected.col};
+  }
+
+  getGoalNode() {
+    return this.raw[this.goal.row][this.goal.col];
   }
 
   setGoal(selected) {
-    this.swap(this.start, selected);
+    this._swapType(this.raw[this.goal.row][this.goal.col], selected);
+    this.goal = {row: selected.row, col: selected.col};
   }
 
   isGoal(node) {
-    return node.row === this.goal.row && node.col === this.goal.col;
+    return node.id === this.getGoalNode().id;
   }
 
-  swap(currentPointer, newSelection) {
-    //Unset square pointed to by currentPointer
-    const currentPointerType = this.grid[currentPointer.row][currentPointer.col].type;
-    const newSelectionCurrentType = newSelection.type;
-    this.grid[currentPointer.row].splice(currentPointer.col, 1, { row: currentPointer.row, col: currentPointer.col, type: newSelectionCurrentType});
-    //Set the new one
-    this.grid[newSelection.row].splice(newSelection.col, 1, { row: newSelection.row, col: newSelection.col, type: currentPointerType });
-    currentPointer.row = newSelection.row;
-    currentPointer.col = newSelection.col;
+  _swapType(node1, node2) {
+    const typeSwap = node1.type;
+    node1.type = node2.type;
+    node2.type = typeSwap;
   }
 
   /**
@@ -74,10 +117,10 @@ class Grid {
    */
   neighbours(node) {
     let neighbours = [];
-    for(let row = node.row - 1; row <= node.row + 1; row++) { //Range from row -1 to +1
-      for(let col = node.col - 1; col <= node.col + 1; col++) { //Range from col -1 to +1
-        if(this.isInBounds(row, col)) {
-          neighbours.push(this.grid[row][col])
+    for (let row = node.row - 1; row <= node.row + 1; row++) { //Range from row -1 to +1
+      for (let col = node.col - 1; col <= node.col + 1; col++) { //Range from col -1 to +1
+        if (this.isInBounds(row, col)) {
+          neighbours.push(this.raw[row][col])
         }
       }
     }
@@ -102,7 +145,7 @@ class Grid {
    * @return int The g-cost/travel cost from the previous node
    */
   calculateTravelCost(previous, next) {
-    if(next.row !== previous.row && next.col !== previous.col) {
+    if (next.row !== previous.row && next.col !== previous.col) {
       return 14;
     }
     return 10;
