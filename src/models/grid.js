@@ -19,8 +19,8 @@ class Grid {
 
     this.size = size;
     this.raw = this._initGrid(this.size, options);
-    this.start = options.start;
-    this.goal = options.goal;
+    this.start = new Node(options.start.row, options.start.col, 'start');
+    this.goal = new Node(options.goal.row, options.goal.col, 'goal');
   }
 
   _fromArray(rawArray) {
@@ -30,12 +30,12 @@ class Grid {
     const startNode = this._find(function (node) {
       return node.type === 'start'
     });
-    this.start = {row: startNode.row, col: startNode.col};
+    this.start = new Node(startNode.row, startNode.col, 'start');
 
     const goalNode = this._find(function (node) {
       return node.type === 'goal'
     });
-    this.goal = {row: goalNode.row, col: goalNode.col};
+    this.goal = new Node(goalNode.row, goalNode.col, 'goal');
   }
 
   _initGrid(size, options) {
@@ -88,7 +88,7 @@ class Grid {
 
   setStart(selected) {
     this._swapType(this.raw[this.start.row][this.start.col], selected);
-    this.start = {row: selected.row, col: selected.col};
+    this.start = new Node(selected.row, selected.col, 'start');
   }
 
   getGoalNode() {
@@ -97,7 +97,7 @@ class Grid {
 
   setGoal(selected) {
     this._swapType(this.raw[this.goal.row][this.goal.col], selected);
-    this.goal = {row: selected.row, col: selected.col};
+    this.goal = new Node(selected.row, selected.col, 'goal');
   }
 
   isGoal(node) {
@@ -119,7 +119,7 @@ class Grid {
     let neighbours = [];
     for (let row = node.row - 1; row <= node.row + 1; row++) { //Range from row -1 to +1
       for (let col = node.col - 1; col <= node.col + 1; col++) { //Range from col -1 to +1
-        if (this.isInBounds(row, col)) {
+        if (this.isInBounds(row, col) && this.raw[row][col].type !== 'wall') {
           neighbours.push(this.raw[row][col])
         }
       }

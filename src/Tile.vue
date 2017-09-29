@@ -1,6 +1,5 @@
 <template>
     <div @click.stop=handleClick($event) class="square" :class=classObject>
-        <p v-show=this.node.solution.cost>{{this.node.solution.cost}}</p>
     </div>
 </template>
 
@@ -18,6 +17,9 @@
         //If solution exists, add solved class
         if(this.node.hasOwnProperty('solution') && typeof this.node.solution !== 'undefined') {
           classes.push('solved');
+          if(this.node.solution.isOnPath) {
+            classes.push('path');
+          }
         }
         return classes;
       }
@@ -38,33 +40,37 @@
 
 <style>
     .square {
-        width: 20px;
-        height: 20px;
-        display: inline-block;
+      width: 20px;
+      height: 20px;
+      display: inline-block;
     }
 
     .square.open {
-        background: lightgrey;
+      background: lightgrey;
     }
 
     .square.wall {
-        background: black;
+      background: black;
     }
 
     .square.goal {
-        background-color: red;
+      background-color: red;
     }
 
-    .square.start {
-        background-color: blue;
+  .square.start {
+      background-color: blue;
     }
 
     .square.solved {
-        border: 1px solid black;
+      border: 1px solid black;
+    }
+
+    .square.path {
+      background-color: yellow;
     }
 
     .square.solved p {
-        display: inline-block;
-        vertical-align: top;
+      display: inline-block;
+      vertical-align: top;
     }
 </style>

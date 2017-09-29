@@ -12,7 +12,7 @@ export default {
 
     const startNode = grid.getStartNode();
     nodesToExplore.queue(new CostedNode(startNode, 0));
-    solution[startNode.id] = { cost: 0 };
+    solution[startNode.id] = { cost: 0, previous: null };
 
     while(nodesToExplore.length > 0) {
       const current = nodesToExplore.dequeue();
@@ -30,6 +30,15 @@ export default {
           nodesToExplore.queue(new CostedNode(next, priority));
           solution[next.id] = { cost: newCost, previous: current.id };
         }
+      }
+    }
+
+    if(grid.goal.id in solution) {
+      solution['solved'] = true;
+      let currentNode = solution[grid.goal.id]
+      while(typeof currentNode !== 'undefined') {
+        currentNode.isOnPath = true;
+        currentNode = solution[currentNode.previous]
       }
     }
 
