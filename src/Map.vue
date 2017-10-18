@@ -2,7 +2,7 @@
     <div>
         <button @click="solve">Run</button>
         <div v-if="show">
-            <div v-for="row in grid.raw">
+            <div v-for="row in grid.raw" class="tileRow">
                 <Tile v-for="node in row" :node=node :key=node.id
                       v-on:toggleType=toggleType v-on:setGoal=setGoal v-on:setStart=setStart>
                 </Tile>
@@ -67,3 +67,9 @@
     }
   }
 </script>
+
+<style>
+    .tileRow {
+        height: 20px
+    }
+</style>

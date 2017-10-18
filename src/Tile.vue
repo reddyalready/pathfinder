@@ -1,5 +1,6 @@
 <template>
-    <div @click.stop=handleClick($event) class="square" :class=classObject>
+    <div @click.stop=handleClick($event) class="tile" :class=classObject>
+        <span v-if="typeof node.solution !== 'undefined'">{{ node.solution.cost }}</span>
     </div>
 </template>
 
@@ -39,38 +40,34 @@
 </script>
 
 <style>
-    .square {
+    .tile {
       width: 20px;
       height: 20px;
       display: inline-block;
+        
     }
 
-    .square.open {
+    .tile.open {
       background: lightgrey;
     }
 
-    .square.wall {
+    .tile.wall {
       background: black;
     }
 
-    .square.goal {
+    .tile.goal {
       background-color: red;
     }
 
-  .square.start {
+    .tile.start {
       background-color: blue;
     }
 
-    .square.solved {
-      border: 1px solid black;
-    }
-
-    .square.path {
+    .tile.solved {
       background-color: yellow;
     }
 
-    .square.solved p {
-      display: inline-block;
-      vertical-align: top;
+    .tile.path {
+      background-color: yellowgreen;
     }
 </style>

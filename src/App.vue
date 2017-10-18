@@ -14,7 +14,7 @@
     components: {Grid},
     data() {
       return {
-        size: 10,
+        size: 20,
         pathfinders: {
           aStar: AStar
         }

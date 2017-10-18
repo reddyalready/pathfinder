@@ -35,7 +35,7 @@ export default {
 
     if(grid.goal.id in solution) {
       solution['solved'] = true;
-      let currentNode = solution[grid.goal.id]
+      let currentNode = solution[grid.goal.id];
       while(typeof currentNode !== 'undefined') {
         currentNode.isOnPath = true;
         currentNode = solution[currentNode.previous]
