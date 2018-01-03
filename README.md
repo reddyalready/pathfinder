@@ -1,5 +1,9 @@
 # Pathfinder
 
+Pathfinder is a free, demonstrative Javascript program that finds paths in generated mazes using the A-Star algorithm.
+
+This is currently a work in progress.
+
 ## Developer Guide
 
 ### Building
