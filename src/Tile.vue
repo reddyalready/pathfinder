@@ -1,5 +1,5 @@
 <template>
-    <div @click.stop=handleClick($event) class="tile" :class=classObject>
+    <div @click.stop=handleClick($event) class="tile" :class=classObject v-bind:style="node.style">
         <span v-if="typeof node.solution !== 'undefined'">{{ node.solution.cost }}</span>
     </div>
 </template>
@@ -45,6 +45,10 @@
       height: 20px;
       display: inline-block;
         
+    }
+
+    .tile span {
+        font-size: 0.7em;
     }
 
     .tile.open {

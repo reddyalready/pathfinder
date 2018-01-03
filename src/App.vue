@@ -1,17 +1,20 @@
 <template>
     <div id="app">
-        <p>Pathfinder</p>
-        <Grid :size=size :pathfinder=pathfinders.aStar></Grid>
+        <h1>Pathfinder</h1>
+        <Map :size=size :pathfinder=pathfinders.aStar></Map>
+        <p class="small">Click = Set/Unset Walls</p>
+        <p class="small">Ctrl + Click = Set Goal</p>
+        <p class="small">Shift + Click = Set Start</p>
     </div>
 </template>
 
 <script>
-  import Grid from './Map.vue'
+  import Map from './Map.vue'
   import AStar from './algorithms/aStar'
 
   export default {
     name: 'app',
-    components: {Grid},
+    components: {Map},
     data() {
       return {
         size: 20,
@@ -35,6 +38,10 @@
 
     h1, h2 {
         font-weight: normal;
+    }
+
+    .small {
+        font-size: 0.8em;
     }
 
     ul {

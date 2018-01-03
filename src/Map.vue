@@ -1,6 +1,5 @@
 <template>
     <div>
-        <button @click="solve">Run</button>
         <div v-if="show">
             <div v-for="row in grid.raw" class="tileRow">
                 <Tile v-for="node in row" :node=node :key=node.id
@@ -8,6 +7,11 @@
                 </Tile>
             </div>
         </div>
+        <span>
+            <button @click="solve">Run</button>
+            <button @click="reset">Reset</button>
+        </span>
+
     </div>
 </template>
 
@@ -44,7 +48,7 @@
       setStart(selected) {
         this.grid.setStart(selected);
       },
-      rerender(){
+      rerender() {
         this.show = false;
         this.$nextTick(() => {
           this.show = true;
@@ -56,11 +60,17 @@
         this.grid = new Grid(
           this.grid.raw.map((row) => {
             return row.map((node) => {
-                node.solution = this.solution[node.id];
-                return node;
+              node.solution = this.solution[node.id];
+              return node;
             })
           })
         );
+
+        this.rerender();
+      },
+      reset() {
+        this.solution = null;
+        this.grid = new Grid(this.size);
 
         this.rerender();
       }
