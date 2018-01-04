@@ -3,10 +3,12 @@
   "description": "Pathfinding algorithms for everyone",
   "version": "1.0.0",
   "author": "Bharat Reddy <me@bharatreddy.com>",
+  "homepage": "https://github.com/reddyalready/pathfinder",
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "deploy": "node ./node_modules/vue-gh-pages/index.js"
   },
   "dependencies": {
     "js-priority-queue": "^0.1.5",
@@ -19,6 +21,8 @@
     "cross-env": "^3.0.0",
     "css-loader": "^0.25.0",
     "file-loader": "^0.9.0",
+    "uglifyjs-webpack-plugin": "^1.0.0-beta.1",
+    "vue-gh-pages": "^1.7.3",
     "vue-loader": "^12.1.0",
     "vue-template-compiler": "^2.3.3",
     "webpack": "^2.6.1",

@@ -1,13 +1,18 @@
-var path = require('path')
-var webpack = require('webpack')
+const Uglify = require('uglifyjs-webpack-plugin');
+
+var path = require('path');
+var webpack = require('webpack');
 
 module.exports = {
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
-    filename: 'build.js'
+    filename: 'bundle.js'
   },
+  plugins: [
+      new Uglify()
+  ],
   module: {
     rules: [
       {
@@ -46,25 +51,24 @@ module.exports = {
     hints: false
   },
   devtool: '#eval-source-map'
-}
+};
 
+// http://vue-loader.vuejs.org/en/workflow/production.html
 if (process.env.NODE_ENV === 'production') {
-  module.exports.devtool = '#source-map'
-  // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([
+    // short-circuits all Vue.js warning code
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"'
       }
     }),
+    // minify with dead-code elimination
     new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
       compress: {
         warnings: false
       }
     }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true
-    })
+    // webpack 1 only - optimize module ids by occurrence count
+    new webpack.optimize.OccurrenceOrderPlugin()
   ])
 }
